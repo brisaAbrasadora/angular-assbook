@@ -14,7 +14,7 @@ Web services are the same as in unit 1, with some additions like Google or Faceb
 
 ## auth/register
 
-This page will contain a form for the user to register. Create the same form used in unit 1 project and validate it: all fields are required, email fields must be of type email, and password must have at least 4 characters.
+This page will contain a form for the user to register. Create the same form used in unit 1 project and validate it: all fields are required, email fields must be of type email, and password must have at least 4 characters.__
 
 Also, create a validator that validates that both emails are equal. Put the error message for this validator below the “repeat email” input (with the corresponding css class for that input). You can create a group validator to check both values, or just create a normal validator that you put on the second email field and receives the first email field as the input value.
 
