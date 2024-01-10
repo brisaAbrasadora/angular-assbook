@@ -14,7 +14,7 @@ Web services are the same as in unit 1, with some additions like Google or Faceb
 
 ## auth/register
 
-This page will contain a form for the user to register. Create the same form used in unit 1 project and validate it: all fields are required, email fields must be of type email, and password must have at least 4 characters.__
+This page will contain a form for the user to register. Create the same form used in unit 1 project and validate it: all fields are required, email fields must be of type email, and password must have at least 4 characters.
 
 Also, create a validator that validates that both emails are equal. Put the error message for this validator below the “repeat email” input (with the corresponding css class for that input). You can create a group validator to check both values, or just create a normal validator that you put on the second email field and receives the first email field as the input value.
 
@@ -58,21 +58,35 @@ Will edit a post. You must reuse the component to add a post (post-form). For ex
 ## profile/me - profile/id
 
 Like in unit 1 project, this page will show an user’s profile information. If you don’t receive an id, show the current logged user, otherwise show the user with the id. Both routes will reuse the same component (profile-page).
+
 Show also a map (and a marker) with the user coordinates.
+
 Show the edit (image, profile, password) buttons only if the profile is yours (logged user).
+
 In this component, put also a link that will show the following:
+
 • User’s posts Will go to the /posts page but sending a query param named creator Example: `/posts?creator=49`
+
 To send query parameters to a route in a link, use the queryParams attribute: `<a [routerLink]="['/posts']" [queryParams]="{ creator: user.id }">...</a>`
+
 This link will generate the following route (example: the user id is 30): `/posts?creator=30`
+
 Use an `@Input()` in the posts-page component to get the value. Keep in mind that this value is optional (maybe it’s not present). Also use a setter to control when the value changes because you could go from this page to the /posts route (top menu link), and Angular won’t reload the component because it’s the same route, so you must check in the setter if there’s a creator or not.
+
 `@Input({ transform: numberAttribute }) set creator(creator?: number) {
 // Check if there’s a creator value
 }`
+
 The logic will be the following:
+
 • If the 'creator' parameter is no received, load all the posts (`GET /posts`).
+
 • If the creator parameter is received. Load only the posts this user has created (`GET posts/user/:id`)
+
 When you’re loading a user’s posts, put something at the beginning of the page (a header for example with some CSS) that shows these are specific posts.
+
 Example `<h2>Posts created by Pepito Pérez</h2>`
+
 In order to get and show the user name (you only have the id), you can call the service that returns the user profile information.
 
 # Interceptors
