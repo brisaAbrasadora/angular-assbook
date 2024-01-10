@@ -124,36 +124,38 @@ In the Menu component, show only the menu links when the user is not logged. Cre
 
 # Guards
 Create 2 guards for controlling authenticated routes:
-• LoginActivateGuard Use it in every route except for auth routes. Will return the call to `AuthService.isLogged()`. In the map function:
-    ◦ if the user is not logged (false), return a redirection (urlTree) to /auth/login page.
-    ◦ If the user is logged (true), return true. You can go to the route.
-• LogoutActivateGuard Use it only for the auth/ routes. Will return the call to `AuthService.isLogged()`. In the map function:
-    ◦ if the user is logged (true), return a redirection (urlTree) to /posts.
-    ◦ If the user is not logged (false), return true. You can go to the route.
+
+&emsp;• LoginActivateGuard Use it in every route except for auth routes. Will return the call to `AuthService.isLogged()`. In the map function:<br/>
+    &emsp;&emsp;◦ if the user is not logged (false), return a redirection (urlTree) to /auth/login page.<br/>
+    &emsp;&emsp;◦ If the user is logged (true), return true. You can go to the route.<br/>
+&emsp;• LogoutActivateGuard Use it only for the auth/ routes. Will return the call to `AuthService.isLogged()`. In the map function:<br/>
+    &emsp;&emsp;◦ if the user is logged (true), return a redirection (urlTree) to /posts.<br/>
+    &emsp;&emsp;◦ If the user is not logged (false), return true. You can go to the route.<br/>
+
 Also, use the leavePageGuard with 'posts/add', 'posts/edit/:id' and '/auth/register' routes. Only ask the user if the he/she has changed something in the form (dirty), or if the data has not been saved yet. Use ngBootstrap modal to ask the user.
 
 # Marks
 
 ## Compulsory part
-• Registration and login, including Google and Facebook login (2 points)
-• Showing posts, including the option to show only posts that a user has created `'/posts?creator=24'` (1,5 points)
-• Post cards are correct, updates the number of likes and have the delete and edit buttons when necessary, and work ok (0,5 points).
-• Post details, including comments (1,5 points)
-• Creating / updating an post (1,5 points)
-• Show and edit profile ( 2 points)
-• Code, structure, good programming practices, reusing components (post-card, post-form, …). Routes, interceptors, resolvers and guards work ok (1 point)
+&emsp;• Registration and login, including Google and Facebook login (2 points)<br/>
+&emsp;• Showing posts, including the option to show only posts that a user has created `'/posts?creator=24'` (1,5 points)<br/>
+&emsp;• Post cards are correct, updates the number of likes and have the delete and edit buttons when necessary, and work ok (0,5 points).<br/>
+&emsp;• Post details, including comments (1,5 points)<br/>
+&emsp;• Creating / updating an post (1,5 points)<br/>
+&emsp;• Show and edit profile ( 2 points)<br/>
+&emsp;• Code, structure, good programming practices, reusing components (post-card, post-form, …). Routes, interceptors, resolvers and guards work ok (1 point)<br/>
 
 ## Optional
-This parts add extra points. Only valid when the base mark is at least 7.
+This parts add extra points. Only valid when the base mark is at least 7.<br/>
 Maximum mark in the project is 12.
 
-• Using Reactive Forms instead of Template Forms (0,5 points).
-• Add animations, including transitions between routes with Angular Animations (up to 1 point)
-• Create a server-side rendered app that works. (up to 0.5 points)
-• Implement that a user can follow another user (up to 1point)
-    ◦ In the profile page of other users (not you), check if you're following him/her. Call the service GET -> /users/:id/follow. It should return an object with a boolean in this format: `{ "following": true }`
-    ◦ show a button to follow or unfollow that user (you can use an icon that changes color, etc.).
-    ◦ If you're not following the user, call POST -> /users/1/follow (empty body) to follow the user
-    ◦ If you're following him/her, call DELETE -> /users/1/follow to unfollow
-    ◦ In your profile page show the users that you follow (`GET /users/me/following`) and the users that follow you (`GET /users/me/followers`). Use ngBootstrap navs to show followers and following in different sections.
-        ▪ Show the avatar and name, and clicking on a user will go to his/her profile page.
+&emsp;• Using Reactive Forms instead of Template Forms (0,5 points).<br/>
+&emsp;• Add animations, including transitions between routes with Angular Animations (up to 1 point)<br/>
+&emsp;• Create a server-side rendered app that works. (up to 0.5 points)<br/>
+&emsp;• Implement that a user can follow another user (up to 1point)<br/>
+    &emsp;&emsp;◦ In the profile page of other users (not you), check if you're following him/her. Call the service GET -> /users/:id/follow. It should return an object with a boolean in this format: `{ "following": true }`<br/>
+    &emsp;&emsp;◦ show a button to follow or unfollow that user (you can use an icon that changes color, etc.).<br/>
+    &emsp;&emsp;◦ If you're not following the user, call POST -> /users/1/follow (empty body) to follow the user<br/>
+    &emsp;&emsp;◦ If you're following him/her, call DELETE -> /users/1/follow to unfollow<br/>
+    &emsp;&emsp;&emsp;◦ In your profile page show the users that you follow (`GET /users/me/following`) and the users that follow you (`GET /users/me/followers`). Use ngBootstrap navs to show followers and following in different sections.<br/>
+        &emsp;&emsp;&emsp;&emsp;▪ Show the avatar and name, and clicking on a user will go to his/her profile page.<br/>
