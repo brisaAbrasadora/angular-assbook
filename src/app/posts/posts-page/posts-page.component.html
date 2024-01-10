@@ -1,0 +1,6 @@
+<search-posts (search)="updateSearch($event)"></search-posts>
+<div id="postContainer" class="mt-3">
+    @for (post of posts | postFilter:params; track post.id;) {
+    <post-card [post]="post" (deleted)="deletePost(post)" />
+    }
+</div>

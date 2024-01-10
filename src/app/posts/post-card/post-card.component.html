@@ -1,0 +1,42 @@
+<div
+        class="card mb-4 shadow"
+        [ngClass]="{
+            'border-success': post.mood == 1,
+            'border-danger': post.mood == 2
+        }"
+    >
+        @if (post.image) {
+        <img class="card-img-top" [src]="post.image" [routerLink]="['/posts', post.id]"/>
+        } @if (post.title || post.description) {
+        <div class="card-body" [routerLink]="['/posts', post.id]">
+            @if (post.title) {
+            <h5 class="card-title">{{ post.title }}</h5>
+            } @if (post.description) {
+            <p class="card-text">{{ post.description }}</p>
+            }
+        </div>
+        }
+        <div class="card-footer bg-transparent">
+            <div class="row">
+                <div class="col-auto avatar ps-1 pe-1">
+                    <img
+                        src="./../../assets/avatar.png"
+                        class="rounded-circle"
+                    />
+                </div>
+                <div class="col">
+                    <div class="name">Bad guy</div>
+                    <div>
+                        <small class="text-muted">
+                            {{post.date | date:"MM/dd/yyyy hh:mm a"}}
+                            <!-- {{formatTime(post.date!)}} -->
+                        </small>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-danger mr-3 h-100 delete" (click)="deletePost()">Delete</button>
+                </div>
+                <div class="col-auto pt-2"><post-likes [likes]="post.likes!" (likesChanged)="changeLikes($event)"></post-likes></div>
+            </div>
+        </div>
+    </div>

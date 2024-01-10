@@ -1,0 +1,10 @@
+<i
+    class="fa-regular fa-thumbs-up me-3"
+    [ngClass]="{ 'text-primary': auxLikes === true }"
+    (click)="toggleLikePost(true)"
+></i>
+<i
+    class="fa-regular fa-thumbs-down"
+    [ngClass]="{ 'text-danger': auxLikes === false }"
+    (click)="toggleLikePost(false)"
+></i>

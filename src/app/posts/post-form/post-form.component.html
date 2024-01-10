@@ -1,0 +1,90 @@
+<form [formGroup]="postForm" class="mt-4" (ngSubmit)="addPost()">
+    <div class="mb-3">
+        <label for="title">Title</label>
+        <input
+            type="text"
+            class="form-control"
+            id="title"
+            formControlName="title"
+            placeholder="Your post's title"
+            [ngClass]="validClasses(title, 'is-valid', 'is-invalid')"
+        />
+        @if(title.errors?.['minlength']) {
+        <div class="invalid-feedback">
+            You must type
+            {{ title.errors?.['minlength'].requiredLength
+            - title.errors?.['minlength'].actualLength }}
+            characters more
+        </div>
+        } @if(title.errors?.['invalidCharacters']) {
+        <div class="invalid-feedback">
+            Title must start with a letter and only contain letters and numbers.
+        </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="description">Description</label>
+        <textarea
+            class="form-control"
+            id="description"
+            formControlName="description"
+            rows="3"
+            placeholder="Write something..."
+            [ngClass]="validClasses(description, 'is-valid', 'is-invalid')"
+        ></textarea>
+        @if(description.errors?.['minlength']) {
+        <div class="invalid-feedback">
+            You must type
+            {{ description.errors?.['minlength'].requiredLength
+                - description.errors?.['minlength'].actualLength }}
+            characters more
+        </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="image">Photo</label>
+        <input
+            type="file"
+            class="form-control"
+            id="image"
+            formControlName="image"
+            accept="image/*"
+            (click)="resetImage()"
+            (change)="changeImage($event)"
+            [ngClass]="validClasses(image, 'is-valid', 'is-invalid')"
+        />
+        @if(image.errors?.['extension']) {
+        <div class="invalid-feedback">
+            Photo extensions allowed are .jpg, .jpeg, .gif, .png and .bmp
+        </div>
+        }
+    </div>
+    @if (!image.errors && imageBase64) {
+    <img
+        alt=""
+        id="imgPreview"
+        name="imgPreview"
+        [src]="imageBase64"
+        class="img-thumbnail"
+    />
+    }
+    <div class="mb-3">
+        <label for="mood">Mood</label>
+        <select class="form-select" formControlName="mood" id="mood">
+            <option value="0">Neutral</option>
+            <option value="1">Happy</option>
+            <option value="2">Angry</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-lg" [disabled]="postForm.invalid">Create</button>
+        </div>
+        @if(postForm.errors?.['formRequired'] && postForm.touched) {
+        <div class="col my-auto text-danger">
+            The post must have at least a title, a description, or an image
+        </div>
+        }
+    </div>
+</form>
