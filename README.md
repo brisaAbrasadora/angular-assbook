@@ -79,8 +79,7 @@ Use an `@Input()` in the posts-page component to get the value. Keep in mind tha
 
 The logic will be the following:
 
-• If the 'creator' parameter is no received, load all the posts (`GET /posts`).
-
+• If the 'creator' parameter is no received, load all the posts (`GET /posts`).<br />
 • If the creator parameter is received. Load only the posts this user has created (`GET posts/user/:id`)
 
 When you’re loading a user’s posts, put something at the beginning of the page (a header for example with some CSS) that shows these are specific posts.
@@ -108,16 +107,17 @@ Operations related with users (profile).
 
 # Authentication
 • AuthService: This service will perform the login (storing the authentication token) and logout (removing the token) actions, and will contain the following attributes and methods:
-    ◦ `#logged: WritableSignal<boolean>` By default `false`. Will indicate if the user is logged in or not. Create a getter that returns this signal in read-only mode.
-    ◦ `login(data: UserLogin): Observable<void>` Will check the login against the server. If login goes ok, save the token in the Local Storage and set logged to true.
-    ◦ `Logout(): void` This method will remove the token from the Local Storage, set this.logged to false.
-    ◦ `isLogged(): Observable<boolean>`.
-▪ If the this.logged property is false and there’s no token in Local Storage, return `Observable<false> of(false)`. Import the of function from `rxjs`, it returns an observable with that value.
-▪ If the this.logged property is true, return `Observable<true> of(true)`
-▪ But if it’s false and there’s a token, return the call to the auth/validate service (Observable). Inside the pipe method:
-• If there's no error (map function), change this.#logged to true and return true
-• If there's an error (catchError function), remove the token from local storage (not valid), and return of(false). The catchError function must return the value inside an observable.
-    ◦ Other methods Implement other methods for user registration, login with Google (send credentials with lat and lng) and Facebook (send accessToken with lat and lng). If you think you need to implement anything else, do it
+
+&emsp;◦ `#logged: WritableSignal<boolean>` By default `false`. Will indicate if the user is logged in or not. Create a getter that returns this signal in read-only mode.<br />
+&emsp;◦ `login(data: UserLogin): Observable<void>` Will check the login against the server. If login goes ok, save the token in the Local Storage and set logged to true.<br />
+&emsp;◦ `Logout(): void` This method will remove the token from the Local Storage, set this.logged to false.<br />
+&emsp;◦ `isLogged(): Observable<boolean>`.<br />
+    &emsp;&emsp;▪ If the this.logged property is false and there’s no token in Local Storage, return `Observable<false> of(false)`. Import the of function from `rxjs`, it returns an observable with that value.<br />
+    &emsp;&emsp;▪ If the this.logged property is true, return `Observable<true> of(true)`<br />
+    &emsp;&emsp;▪ But if it’s false and there’s a token, return the call to the auth/validate service (Observable). Inside the pipe method:<br />
+        &emsp;&emsp;&emsp;• If there's no error (map function), change this.#logged to true and return true<br />
+        &emsp;&emsp;&emsp;• If there's an error (catchError function), remove the token from local storage (not valid), and return of(false). The catchError function must return the value inside an observable.<br />
+&emsp;◦ Other methods Implement other methods for user registration, login with Google (send credentials with lat and lng) and Facebook (send accessToken with lat and lng). If you think you need to implement anything else, do it<br />
 
 ## Showing/hiding menu when login/logut
 In the Menu component, show only the menu links when the user is not logged. Create a computed signal with the same value as the logged signal in the AuthService service. The logout functionality is also handled by this component. Call `AuthService.logout()` to remove the token.
