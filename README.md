@@ -2,26 +2,26 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
 
-## Development server
+This final exercise will be an expansion of the exercises we’ve been doing during this unit. Use week 10 exercise as a starting point.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Web services are the same as in unit 1, with some additions like Google or Facebook login -> https://github.com/arturober/assbook-services
 
-## Code scaffolding
+## Progress
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+🖤 = to do 🩷 = complete
 
-## Build
+# Not authenticated routes
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+# auth/register
 
-## Running unit tests
+This page will contain a form for the user to register. Create the same form used in unit 1 project and validate it: all fields are required, email fields must be of type email, and password must have at least 4 characters.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Also, create a validator that validates that both emails are equal. Put the error message for this validator below the “repeat email” input (with the corresponding css class for that input). You can create a group validator to check both values, or just create a normal validator that you put on the second email field and receives the first email field as the input value.
 
-## Running end-to-end tests
+Don’t forget to geolocate the user and send the coordinates to the server.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+# auth/login
 
-## Further help
+This page will contain a page with a form to log in (email, password) and the Google and Facebook buttons for login/register. Validate the form (all fields required).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Also geolocate the user here and send the coordinates with the login information (lat, lng). This includes the normal login and also Google/Facebook login.
