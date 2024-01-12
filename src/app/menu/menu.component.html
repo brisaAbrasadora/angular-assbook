@@ -1,24 +1,55 @@
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">AssBook</a>
-        <ul class="navbar-nav me-auto mb-lg-0">
-            <li class="nav-item">
-                <a
-                    class="nav-link"
-                    [routerLink]="['/posts']"
-                    [routerLinkActive]="['active']"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                >
-                    Home
-                </a>
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link"
-                    [routerLink]="['/posts/add']"
-                    [routerLinkActive]="['active']"
-                >
-                    New post
-                </a>
-            </li>
-        </ul>
-    </div>
+<div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/']">AssBook</a>
+    @if(logged()) {
+    <ul class="navbar-nav me-auto mb-lg-0">
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                [routerLink]="['/posts']"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+            >
+                Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                [routerLink]="['/posts/add']"
+                [routerLinkActive]="['active']"
+            >
+                New post
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                [routerLink]="['/profile']"
+                [routerLinkActive]="['active']"
+            >
+                My profile
+            </a>
+        </li>
+    </ul>
+    }
+    <ul class="navbar-nav">
+        @if(logged()) {
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                [routerLink]="['/auth/login']"
+                (click)="logout()"
+            >
+                Logout
+            </a>
+        </li>
+        } @else {
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/auth/login']"> Login </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/auth/register']"> Register </a>
+        </li>
+        }
+    </ul>
+</div>

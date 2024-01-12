@@ -2,11 +2,13 @@ import { Routes } from "@angular/router";
 import { leavePageGuard } from "../guards/leave-page.guard";
 import { numericIdGuard } from "../guards/numeric-id.guard";
 import { postResolver } from "./resolvers/post.resolver";
+import { loginActivateGuard } from "../guards/login-activate.guard";
 
 export const postsRoutes: Routes = [
     {
         path: "",
-        title: "Posts | AssBook Lite",
+        title: "Posts | AssBook",
+        canActivate: [loginActivateGuard],
         loadComponent: () =>
             import("./posts-page/posts-page.component").then(
                 (m) => m.PostsPageComponent
@@ -14,7 +16,8 @@ export const postsRoutes: Routes = [
     },
     {
         path: "add",
-        title: "Add a post | AssBook Lite",
+        title: "Add a post | AssBook",
+        canActivate: [loginActivateGuard],
         canDeactivate: [leavePageGuard],
         loadComponent: () =>
             import("./post-form/post-form.component").then(
@@ -23,8 +26,8 @@ export const postsRoutes: Routes = [
     },
     {
         path: ":id",
-        title: "Post detail | AssBook Lite",
-        canActivate: [numericIdGuard],
+        title: "Post detail | AssBook",
+        canActivate: [numericIdGuard, loginActivateGuard],
         resolve: { post: postResolver },
         loadComponent: () =>
             import("./post-detail/post-detail.component").then(
