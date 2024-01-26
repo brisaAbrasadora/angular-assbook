@@ -29,7 +29,7 @@ Web services are the same as in unit 1, with some additions like Google or Faceb
 This page will contain a page with  
 &nbsp;&nbsp;&nbsp;&nbsp;🩷 a form to log in (email, password)  
 &nbsp;&nbsp;&nbsp;&nbsp;🖤 the Google and Facebook buttons for login/register.  
-&nbsp;&nbsp;&nbsp;&nbsp;🖤 Validate the form (all fields required).  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 Validate the form (all fields required).  
 
 Also geolocate the user here and send the coordinates with the login information (lat, lng). This includes the  
 &nbsp;&nbsp;&nbsp;&nbsp;🖤 normal login  
