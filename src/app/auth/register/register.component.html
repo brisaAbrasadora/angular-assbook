@@ -1,0 +1,143 @@
+<form
+    [formGroup]="registerForm"
+    class="mt-4"
+    (ngSubmit)="register()"
+    role="form"
+>
+    <legend>Create an account</legend>
+
+    <div class="mb-3">
+        <label for="name">Name:</label>
+        <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Name"
+            formControlName="name"
+            [ngClass]="validClasses(name, 'is-valid', 'is-invalid')"
+        />
+        @if(name.errors?.['required']) {
+        <div class="invalid-feedback">User name is required.</div>
+        }
+    </div>
+    <div formGroupName="emailGroup">
+        <div class="mb-3">
+            <label for="email">Email:</label>
+            <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Email"
+                formControlName="email"
+                [ngClass]="validClasses(email, 'is-valid', 'is-invalid')"
+            />
+            @if(email.errors?.['required']) {
+            <div class="invalid-feedback">Email is required.</div>
+            } @if(email.errors?.['email']) {
+            <div class="invalid-feedback">This must have an email format.</div>
+            }
+        </div>
+        <div class="mb-3">
+            <label for="emailConfirm">Repeat Email:</label>
+            <input
+                type="email"
+                class="form-control"
+                id="emailConfirm"
+                formControlName="emailConfirm"
+                placeholder="Email"
+                [ngClass]="{
+                    'is-valid':
+                        emailConfirm.touched &&
+                        emailConfirm.valid &&
+                        emailConfirm.value &&
+                        emailGroup.valid,
+                    'is-invalid':
+                        (emailConfirm.touched && emailConfirm.invalid) ||
+                        (emailGroup.invalid && emailConfirm.touched)
+                }"
+            />
+            @if(emailConfirm.errors?.['required']) {
+            <div class="invalid-feedback">Email is required.</div>
+            }
+            @if(emailConfirm.errors?.['email']) {
+            <div class="invalid-feedback">This must have an email format.</div>
+            }
+            @if(emailGroup.errors?.["match"]) {
+                <div class="invalid-feedback">Email must match.</div>
+            }
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="password">Password:</label>
+        <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="password"
+            placeholder="Password"
+            [ngClass]="validClasses(password, 'is-valid', 'is-invalid')"
+        />
+        @if(password.errors?.["required"]) {
+            <div class="invalid-feedback">Password is required.</div>
+        }
+        @if(password.errors?.["minlength"]) {
+            <div class="invalid-feedback">Password must be at least 4 characters long.</div>
+        }
+    </div>
+    <div class="form-row">
+        <div class="mb-3 col">
+            <label for="lat">Latitude:</label>
+            <input
+                type="text"
+                class="form-control"
+                id="lat"
+                placeholder="Geolocating..."
+                readonly
+            />
+        </div>
+        <div class="mb-3 col">
+            <label for="lng">Longitude:</label>
+            <input
+                type="text"
+                class="form-control"
+                id="lng"
+                placeholder="Geolocating..."
+                readonly
+            />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="avatar">Avatar image</label>
+        <input
+            type="file"
+            class="form-control"
+            id="avatar"
+            formControlName="avatar"
+            accept="image/*"
+            (click)="resetImage()"
+            (change)="changeImage($event)"
+            [ngClass]="validClasses(avatar, 'is-valid', 'is-invalid')"
+        />
+        @if(avatar.errors?.["required"]) {
+            <div class="invalid-feedback">Avatar is required.</div>
+        }
+        @if(avatar.errors?.['extension']) {
+        <div class="invalid-feedback">
+            Avatar extensions allowed are .jpg, .jpeg and .png
+        </div>
+        }
+    </div>
+    @if (!avatar.errors && avatarBase64) {
+    <img [src]="avatarBase64" alt="" id="imgPreview" class="img-thumbnail" />
+    }
+    <p class="text-danger" id="errorInfo"></p>
+    <a class="btn btn-secondary" href="login.html" role="button">Go back</a>
+    <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="registerForm.invalid"
+    >
+        Create account
+    </button>
+</form>
