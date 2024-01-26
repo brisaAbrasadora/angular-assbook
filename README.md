@@ -41,13 +41,14 @@ Also geolocate the user here and send the coordinates with the login information
 
 This page will show all posts (like in previous exercises). Use the same card you used in unit 1 project.
 
-In the card (important  if the post is yours):
-• Put the button to delete the post (this will show a confirm dialog asking if you’re sure you want to delete it using ngBootstrap).
-• Put a button to edit the post. The edit button will go to /posts/:id/edit.
+In the card (important if the post is yours):  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 Put the button to delete the post  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🖤 (this will show a confirm dialog asking if you’re sure you want to delete it using ngBootstrap).
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 Put a button to edit the post. The edit button will go to /posts/:id/edit.
 
-Also show the nav-bar with an input to filter posts by title and description.
+🖤 Also show the nav-bar with an input to filter posts by title and description.
 
-You can use signals to filter the posts (+0,25) instead of a pipe.
+🖤 You can use signals to filter the posts (+0,25) instead of a pipe.
 
 ## posts/:id
 
@@ -66,21 +67,25 @@ Will edit a post. You must reuse the component to add a post (post-form). For ex
 
 ## profile/me - profile/id
 
-Like in unit 1 project, this page will show an user’s profile information. If you don’t receive an id, show the current logged user, otherwise show the user with the id. Both routes will reuse the same component (profile-page).
+Like in unit 1 project, this page will show an user’s profile information.  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 If you don’t receive an id, show the current logged user  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 otherwise show the user with the id.  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 Both routes will reuse the same component (profile-page).
 
-Show also a map (and a marker) with the user coordinates.
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 Show also a map (and a marker) with the user coordinates.
 
-Show the edit (image, profile, password) buttons only if the profile is yours (logged user).
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 Show the edit (image, profile, password) buttons only if the profile is yours (logged user).
 
-In this component, put also a link that will show the following:
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 In this component, put also a link that will show the following:
 
-• User’s posts Will go to the /posts page but sending a query param named creator Example: `/posts?creator=49`
+• User’s posts  
+🖤 Will go to the /posts page but sending a query param named creator Example: `/posts?creator=49`
 
-To send query parameters to a route in a link, use the queryParams attribute: `<a [routerLink]="['/posts']" [queryParams]="{ creator: user.id }">...</a>`
+🖤 To send query parameters to a route in a link, use the queryParams attribute: `<a [routerLink]="['/posts']" [queryParams]="{ creator: user.id }">...</a>`
 
 This link will generate the following route (example: the user id is 30): `/posts?creator=30`
 
-Use an `@Input()` in the posts-page component to get the value. Keep in mind that this value is optional (maybe it’s not present). Also use a setter to control when the value changes because you could go from this page to the /posts route (top menu link), and Angular won’t reload the component because it’s the same route, so you must check in the setter if there’s a creator or not.
+🖤 Use an `@Input()` in the posts-page component to get the value. Keep in mind that this value is optional (maybe it’s not present). Also use a setter to control when the value changes because you could go from this page to the /posts route (top menu link), and Angular won’t reload the component because it’s the same route, so you must check in the setter if there’s a creator or not.
 
 `@Input({ transform: numberAttribute }) set creator(creator?: number) {
 // Check if there’s a creator value
@@ -146,13 +151,13 @@ Also, use the leavePageGuard with 'posts/add', 'posts/edit/:id' and '/auth/regis
 # Marks
 
 ## Compulsory part
-&emsp;• Registration and login, including Google and Facebook login (2 points)<br/>
-&emsp;• Showing posts, including the option to show only posts that a user has created `'/posts?creator=24'` (1,5 points)<br/>
-&emsp;• Post cards are correct, updates the number of likes and have the delete and edit buttons when necessary, and work ok (0,5 points).<br/>
-&emsp;• Post details, including comments (1,5 points)<br/>
-&emsp;• Creating / updating an post (1,5 points)<br/>
-&emsp;• Show and edit profile ( 2 points)<br/>
-&emsp;• Code, structure, good programming practices, reusing components (post-card, post-form, …). Routes, interceptors, resolvers and guards work ok (1 point)<br/>
+&emsp;🖤 • Registration and login, including Google and Facebook login (2 points)<br/>
+&emsp;🖤 • Showing posts, including the option to show only posts that a user has created `'/posts?creator=24'` (1,5 points)<br/>
+&emsp;🖤 • Post cards are correct, updates the number of likes and have the delete and edit buttons when necessary, and work ok (0,5 points).<br/>
+&emsp;🖤• Post details, including comments (1,5 points)<br/>
+&emsp;🖤 • Creating / updating an post (1,5 points)<br/>
+&emsp;🖤 • Show and edit profile ( 2 points)<br/>
+&emsp;🖤 • Code, structure, good programming practices, reusing components (post-card, post-form, …). Routes, interceptors, resolvers and guards work ok (1 point)<br/>
 
 ## Optional
 This parts add extra points. Only valid when the base mark is at least 7.<br/>
