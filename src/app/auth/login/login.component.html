@@ -1,27 +1,42 @@
-<form class="mt-4" (ngSubmit)="login()">
+<form [formGroup]="loginForm" class="mt-4" (ngSubmit)="login()" role="form">
     <legend>Welcome to AssBook!</legend>
 
     <div class="mb-3">
-        <label for="email">Email:</label>
+        <label for="name">Email:</label>
         <input
             type="email"
             class="form-control"
-            name="email"
+            id="email"
             placeholder="Email"
-            required
-            [(ngModel)]="email"
+            formControlName="email"
+            [ngClass]="validClasses(email, 'is-valid', 'is-invalid')"
         />
+        @if(email.errors?.['required']) {
+        <div class="invalid-feedback">Email is required.</div>
+        } @if(email.errors?.['email']) {
+        <div class="invalid-feedback">This must have an email format.</div>
+        }
     </div>
+
     <div class="mb-3">
         <label for="password">Password:</label>
         <input
             type="password"
             class="form-control"
-            name="password"
+            id="password"
+            formControlName="password"
             placeholder="Password"
-            required
-            [(ngModel)]="password"
+            [ngClass]="validClasses(password, 'is-valid', 'is-invalid')"
         />
+        @if(password.errors?.["required"]) {
+        <div class="invalid-feedback">Password is required.</div>
+        }
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid"
+    >
+        Login
+    </button>
 </form>
