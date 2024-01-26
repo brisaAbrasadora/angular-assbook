@@ -16,9 +16,9 @@ Web services are the same as in unit 1, with some additions like Google or Faceb
 
 🩷 This page will contain a form for the user to register.  
 🩷 Create the same form used in unit 1 project and validate it:  
-    🩷 all fields are required,  
-    🩷 email fields must be of type email,  
-    🩷 and password must have at least 4 characters.  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 all fields are required,  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 email fields must be of type email,  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 and password must have at least 4 characters.  
 
 🩷 Also, create a validator that validates that both emails are equal. Put the error message for this validator below the “repeat email” input (with the corresponding css class for that input). You can create a group validator to check both values, or just create a normal validator that you put on the second email field and receives the first email field as the input value.
 
@@ -27,13 +27,13 @@ Web services are the same as in unit 1, with some additions like Google or Faceb
 ## auth/login
 
 This page will contain a page with  
-    🩷 a form to log in (email, password)  
-    🖤 the Google and Facebook buttons for login/register.  
-    🖤 Validate the form (all fields required).  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 a form to log in (email, password)  
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 the Google and Facebook buttons for login/register.  
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 Validate the form (all fields required).  
 
 Also geolocate the user here and send the coordinates with the login information (lat, lng). This includes the  
-    🖤 normal login  
-    🖤 Google/Facebook login.  
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 normal login  
+&nbsp;&nbsp;&nbsp;&nbsp;🖤 Google/Facebook login.  
 
 # Authenticated routes
 
