@@ -1,6 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { FormControl, ReactiveFormsModule, NonNullableFormBuilder, Validators } from "@angular/forms";
-import { Post } from "../interfaces/post";
+import { PostInsert } from "../interfaces/post";
 import { CommonModule } from "@angular/common";
 import { PostsService } from "../services/posts.service";
 import { Router } from "@angular/router";
@@ -60,7 +60,7 @@ export class PostFormComponent {
 
     addPost(): void {
         if (this.postForm.valid) {
-            const post: Post = {
+            const post: PostInsert = {
                 ...this.postForm.getRawValue(),
                 image: this.imageBase64,
                 mood: +this.mood.value

@@ -12,6 +12,11 @@ export const routes: Routes = [
             import("./posts/posts.routes").then((m) => m.postsRoutes),
     },
     {
+        path: "profile",
+        loadChildren: () =>
+            import("./profile/profile.routes").then((m) => m.profileRoutes),
+    },
+    {
         path: "",
         redirectTo: "auth/login",
         pathMatch: "full",

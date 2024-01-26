@@ -15,6 +15,7 @@ export class PostDetailComponent  {
     @Input() post!: Post;
     #postsService = inject(PostsService);
     #router = inject(Router);
+    
     goBack() {
         this.#router.navigate(["/posts"]);
     }

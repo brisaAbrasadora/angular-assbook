@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { Post } from "../interfaces/post";
+import { Post, PostInsert } from "../interfaces/post";
 import { Observable, map } from "rxjs";
 import { PostsResponse, SinglePostResponse } from "../interfaces/responses";
 
@@ -25,7 +25,7 @@ export class PostsService {
             .pipe(map((resp) => resp.post));
     }
 
-    addPost(post: Post): Observable<Post> {
+    addPost(post: PostInsert): Observable<Post> {
         return this.#http
             .post<Post>(`${this.#postsUrl}`, post);
     }

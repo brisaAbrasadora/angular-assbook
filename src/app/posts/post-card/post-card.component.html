@@ -20,23 +20,29 @@
             <div class="row">
                 <div class="col-auto avatar ps-1 pe-1">
                     <img
-                        src="./../../assets/avatar.png"
+                        [src]="post.creator.avatar"
                         class="rounded-circle"
                     />
                 </div>
                 <div class="col">
-                    <div class="name">Bad guy</div>
+                    <div class="name" [routerLink]="['/profile', post.creator.id]">{{ post.creator.name }}</div>
                     <div>
                         <small class="text-muted">
-                            {{post.date | date:"MM/dd/yyyy hh:mm a"}}
-                            <!-- {{formatTime(post.date!)}} -->
+                            {{ post.date | date:"MM/dd/yyyy hh:mm a" }}
                         </small>
                     </div>
                 </div>
-                <div class="col-auto">
-                    <button class="btn btn-danger mr-3 h-100 delete" (click)="deletePost()">Delete</button>
+                @if(post.mine) {    
+                    <div class="col-auto">
+                        <button class="btn btn-danger mr-3 h-100 delete" (click)="deletePost()">Delete</button>
+                    </div>
+                }
+                <div class="col-auto pt-2">
+                    <post-likes [likes]="post.likes!" (likesChanged)="changeLikes($event)"></post-likes>
+                    <div>
+                        <small class="text-muted">{{ post.totalLikes }} likes</small>
+                    </div>
                 </div>
-                <div class="col-auto pt-2"><post-likes [likes]="post.likes!" (likesChanged)="changeLikes($event)"></post-likes></div>
             </div>
         </div>
     </div>
