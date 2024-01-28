@@ -1,45 +1,86 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
-import { FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, OnInit, inject } from "@angular/core";
+import {
+    FormControl,
+    NonNullableFormBuilder,
+    ReactiveFormsModule,
+    Validators,
+} from "@angular/forms";
 import { extensionValidator } from "../../validators/extension.validator";
 import { User } from "../interfaces/user";
 import { AuthService } from "../services/auth.service";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { matchEmailValidator } from "../../validators/match-email.validator";
-
-
+import { GeolocationService } from "../services/geolocation.service";
 
 @Component({
     selector: "register",
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, RouterLink],
     templateUrl: "./register.component.html",
     styleUrl: "./register.component.css",
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
+    ngOnInit(): void {
+        this.#geolocationService.getLocation().subscribe({
+            next: (coordinates) => {
+                this.latitude.setValue(coordinates.latitude);
+                this.longitude.setValue(coordinates.longitude);
+                console.log("Received coordinates in register:", coordinates.latitude);
+            },
+            error: (error) => {
+                console.error("Error getting location in register:", error);
+                this.latitude.setValue(0);
+                this.longitude.setValue(0);
+            },
+        });
+    }
+
     #formBuilder = inject(NonNullableFormBuilder);
     #authService = inject(AuthService);
     #router = inject(Router);
+    #geolocationService = inject(GeolocationService);
 
-    name: FormControl<string> = this.#formBuilder.control("", [Validators.required]);
-    email: FormControl<string> = this.#formBuilder.control("", [Validators.required, Validators.email,]);
-    emailConfirm: FormControl<string> = this.#formBuilder.control("", [Validators.required, Validators.email,]);
-    password: FormControl<string> = this.#formBuilder.control("", [Validators.required, Validators.minLength(4)]);
-    avatar: FormControl = this.#formBuilder.control("", [Validators.required, extensionValidator(["png", "jpg", "jpeg"]), ]);
+    avatarBase64: string = "";
 
-    emailGroup = this.#formBuilder.group({
-        email: this.email,
-        emailConfirm: this.emailConfirm
-    }, { validators: matchEmailValidator});
+    name: FormControl<string> = this.#formBuilder.control("", [
+        Validators.required,
+    ]);
+    email: FormControl<string> = this.#formBuilder.control("", [
+        Validators.required,
+        Validators.email,
+    ]);
+    emailConfirm: FormControl<string> = this.#formBuilder.control("", [
+        Validators.required,
+        Validators.email,
+    ]);
+    password: FormControl<string> = this.#formBuilder.control("", [
+        Validators.required,
+        Validators.minLength(4),
+    ]);
+    avatar: FormControl = this.#formBuilder.control("", [
+        Validators.required,
+        extensionValidator(["png", "jpg", "jpeg"]),
+    ]);
+    latitude: FormControl<number | undefined> = this.#formBuilder.control(undefined);
+    longitude: FormControl<number | undefined> = this.#formBuilder.control(undefined);
+
+    emailGroup = this.#formBuilder.group(
+        {
+            email: this.email,
+            emailConfirm: this.emailConfirm,
+        },
+        { validators: matchEmailValidator }
+    );
 
     registerForm = this.#formBuilder.group({
         name: this.name,
         emailGroup: this.emailGroup,
         password: this.password,
+        latitude: this.latitude,
+        longitude: this.longitude,
         avatar: this.avatar,
-    }, );
-
-    avatarBase64: string = "";
+    });
 
     constructor() {
         this.resetForm();
@@ -56,8 +97,8 @@ export class RegisterComponent {
                 email: this.email.getRawValue(),
                 password: this.password.getRawValue(),
                 avatar: this.avatarBase64,
-                lat: 0,
-                lng: 0,
+                lat: this.latitude.getRawValue() as number,
+                lng: this.longitude.getRawValue() as number,
             };
 
             this.#authService.register(user).subscribe({
@@ -66,7 +107,7 @@ export class RegisterComponent {
                 },
                 error: (error) => {
                     console.error(error);
-                }
+                },
             });
         }
     }
@@ -94,10 +135,14 @@ export class RegisterComponent {
         this.avatarBase64 = "";
     }
 
-    validClasses(control: FormControl, validClass: string, errorClass: string): { [key: string]: boolean } {
+    validClasses(
+        control: FormControl,
+        validClass: string,
+        errorClass: string
+    ): { [key: string]: boolean } {
         return {
             [validClass]: control.touched && control.valid && control.value,
-            [errorClass]: control.touched && control.invalid
+            [errorClass]: control.touched && control.invalid,
         };
     }
 }

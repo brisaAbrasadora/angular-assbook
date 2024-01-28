@@ -41,10 +41,10 @@ export class AuthService {
     }
 
     isLogged(): Observable<boolean> {
-        if(this.logged()) {
+        if (this.logged()) {
             return of(true);
         } else {
-            if(localStorage.getItem("token")) {
+            if (localStorage.getItem("token")) {
                 return this.#http
                     .get<TokenResponse>(`${this.#authUrl}/validate`)
                     .pipe(
@@ -65,9 +65,36 @@ export class AuthService {
     register(data: User): Observable<User> {
         return this.#http
             .post<UserResponse>(`${this.#authUrl}/register`, data)
-            .pipe(
-                map((resp) => resp.user)
+            .pipe(map((resp) => resp.user));
+    }
+
+    getLocation(): Observable<GeolocationCoordinates> {
+        return new Observable<GeolocationCoordinates>((observer) => {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    observer.next(pos.coords);
+                    observer.complete();
+                },
+                (error) => {
+                    switch (error.code) {
+                    case error.PERMISSION_DENIED: // User didn't allow the web page to retrieve location
+                        observer.error("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE: // Couldn't get the location
+                        observer.error("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT: // The maximum amount of time to get location information has passed
+                        observer.error(
+                            "The request to get user location timed out."
+                        );
+                        break;
+                    default:
+                        observer.error("An unknown error occurred.");
+                        break;
+                    }
+                }
             );
+        });
     }
 
     // Missing login with Google
