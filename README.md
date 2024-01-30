@@ -22,7 +22,7 @@ Web services are the same as in unit 1, with some additions like Google or Faceb
 
 🩷 Also, create a validator that validates that both emails are equal. Put the error message for this validator below the “repeat email” input (with the corresponding css class for that input). You can create a group validator to check both values, or just create a normal validator that you put on the second email field and receives the first email field as the input value.
 
-🖤 Don’t forget to geolocate the user and send the coordinates to the server.
+🩷 Don’t forget to geolocate the user and send the coordinates to the server.
 
 ## auth/login
 
@@ -32,7 +32,7 @@ This page will contain a page with
 &nbsp;&nbsp;&nbsp;&nbsp;🩷 Validate the form (all fields required).  
 
 Also geolocate the user here and send the coordinates with the login information (lat, lng). This includes the  
-&nbsp;&nbsp;&nbsp;&nbsp;🖤 normal login  
+&nbsp;&nbsp;&nbsp;&nbsp;🩷 normal login  
 &nbsp;&nbsp;&nbsp;&nbsp;🖤 Google/Facebook login.  
 
 # Authenticated routes
