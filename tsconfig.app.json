@@ -3,7 +3,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["bingmaps"]
+    "types": [
+      "bingmaps",
+      "@angular/localize"
+    ]
   },
   "files": [
     "src/main.ts"

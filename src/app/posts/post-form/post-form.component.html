@@ -8,7 +8,6 @@
             formControlName="title"
             placeholder="Your post's title"
             [ngClass]="validClasses(title, 'is-valid', 'is-invalid')"
-            (click)="test()"
         />
         @if(title.errors?.['minlength']) {
         <div class="invalid-feedback">
@@ -43,12 +42,33 @@
         }
     </div>
     <div class="mb-3">
-        <input type="radio" id="postPhoto" value="photo" checked>
-        <label for="postPhoto">Post Photo</label>
-        <input type="radio" id="postLocation" value="location" class="ms-3">
-        <label for="postLocation">Post location</label>
+        <input
+            type="radio"
+            id="uploadPhoto"
+            name="postType"
+            (change)="changePostType()"
+            [checked]="photoSelected()"
+        />
+        <label for="uploadPhoto" class="ms-1">Post Photo</label>
+        <input
+            type="radio"
+            id="uploadLocation"
+            name="postType"
+            (change)="changePostType()"
+            class="ms-3"
+            [checked]="!photoSelected()"
+            [disabled]="disabledLocation()"
+        />
+        <label
+            for="uploadLocation"
+            class="ms-1"
+            [ngClass]="{
+                'text-muted': disabledLocation()
+            }"
+            >Post location</label
+        >
     </div>
-    <div id="photo-group">
+    <div id="photo-group" [ngClass]="{ 'd-none': !photoSelected() }">
         <div class="mb-3">
             <label for="image">Photo</label>
             <input
@@ -77,7 +97,30 @@
         />
         }
     </div>
-    <div id="location-group"></div>
+    <div
+        id="location-group"
+        class="mb-3"
+        [ngClass]="{ 'd-none': photoSelected() }"
+    >
+        <div id="location-container" class="mb-3">
+            <label for="place">Address</label>
+            <input
+                type="text"
+                class="form-control"
+                id="place"
+                placeholder="Address"
+                formControlName="place"
+            />
+        </div>
+        <bm-map [coords]="coordinates()">
+            <bm-marker [coords]="coordinates()" color="blue"></bm-marker>
+            <bm-autosuggest
+                idContainer="location-container"
+                idInput="place"
+                (locationChanged)="moveMap($event)"
+            ></bm-autosuggest>
+        </bm-map>
+    </div>
     <div class="mb-3">
         <label for="mood">Mood</label>
         <select class="form-select" formControlName="mood" id="mood">
@@ -89,7 +132,13 @@
 
     <div class="row">
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary btn-lg" [disabled]="postForm.invalid">Create</button>
+            <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="postForm.invalid"
+            >
+                {{ editMode ? "Edit" : "Submit" }}
+            </button>
         </div>
         @if(postForm.errors?.['formRequired'] && postForm.touched) {
         <div class="col my-auto text-danger">
