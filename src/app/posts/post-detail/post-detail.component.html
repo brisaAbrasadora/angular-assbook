@@ -1,6 +1,7 @@
 <div class="mt-4">
     <post-card [post]="post" (deleted)="deletePost(post)" />
 </div>
+<post-comments [id]="post.id" />
 <div class="mt-4 mb-4">
     <button class="btn btn-success" (click)="goBack()">Go back</button>
 </div>

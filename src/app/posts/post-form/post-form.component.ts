@@ -18,29 +18,8 @@ import { formRequiredValidator } from "../../validators/form-required.validator"
 export class PostFormComponent implements OnInit{
     @Input() post!: Post;
     @Input( {transform: numberAttribute }) id!: number;
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     if (changes["post"].currentValue !== undefined) {
-    //         console.log(changes["post"].currentValue !== undefined);
-    //         this.title.setValue(changes["post"].currentValue["title"]);
-    //         console.log(JSON.stringify(changes));
-    //         for (const propName in changes) {
-    //             console.log(`${propName}`);
-    //             const chng = changes[propName];
-    //             const cur = JSON.stringify(chng.currentValue);
-    //             const prev = JSON.stringify(chng.previousValue);
-    //             console.log(`${propName}: currentValue = ${cur}\n previousValue = ${prev}`);
-    //         }
-    //     }
-    // }
+    
     ngOnInit(): void {
-        // this.#postsService.getPost(this.id)
-        //     .subscribe((p) => (this.post = p));
-        // title: FormControl = this.#formBuilder.control(this.post ? this.post.title : "" , [Validators.minLength(5),
-        //     invalidCharactersValidator("^[a-zA-Z][a-zA-Z ]*$")]);
-        // description: FormControl = this.#formBuilder.control("", Validators.minLength(8));
-        // image: FormControl = this.#formBuilder.control("", extensionValidator(["jpg", "png", "jpeg",
-        //     "gif", "bmp"]));
-        // mood: FormControl = this.#formBuilder.control(0);
         console.log(this.post);
         this.title.setValue(this.post?.title);
         this.description.setValue(this.post?.description);

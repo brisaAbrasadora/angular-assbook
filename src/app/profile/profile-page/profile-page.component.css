@@ -3,3 +3,13 @@ bm-map {
     height: 300px;
     width: 600px;
 }
+
+#profile div:has(#avatar) {
+    position: relative;
+    & > label {
+      position: absolute;
+      right: 0px;
+      bottom: 0px;
+    }
+  }
+  

@@ -1,0 +1,14 @@
+#comments li > img {
+    width: 40px;
+    height: 40px;
+}
+
+#comments strong {
+    color: #385898;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#comments img {
+    cursor: pointer;
+}

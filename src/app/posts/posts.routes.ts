@@ -3,6 +3,7 @@ import { leavePageGuard } from "../guards/leave-page.guard";
 import { numericIdGuard } from "../guards/numeric-id.guard";
 import { postResolver } from "./resolvers/post.resolver";
 import { loginActivateGuard } from "../guards/login-activate.guard";
+import { commentsResolver } from "./resolvers/comments.resolver";
 
 export const postsRoutes: Routes = [
     {
@@ -28,7 +29,7 @@ export const postsRoutes: Routes = [
         path: ":id",
         title: "Post detail | AssBook",
         canActivate: [numericIdGuard, loginActivateGuard],
-        resolve: { post: postResolver },
+        resolve: { post: postResolver, comments: commentsResolver },
         loadComponent: () =>
             import("./post-detail/post-detail.component").then(
                 (m) => m.PostDetailComponent

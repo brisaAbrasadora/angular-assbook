@@ -1,0 +1,48 @@
+<ul id="comments" class="list-group mt-4 mb-4">
+    <li class="list-group-item active">Comments</li>
+    @for (comment of comments(); track comment.id) {
+    <li class="list-group-item d-flex flex-row">
+        <img
+            [src]="comment.user.avatar"
+            [alt]=""
+            class="rounded-circle align-self start me-3"
+        />
+        <div>
+            <div>
+                <a href="" [routerLink]="['/profile', comment.user.id]"
+                    ><strong>{{ comment.user.name }}</strong></a
+                >
+                <span>: {{ comment.text }}</span>
+            </div>
+            <div>
+                <small class="text-muted">{{
+                    comment.date | date : "MM/dd/yyyy hh:mm a"
+                }}</small>
+            </div>
+        </div>
+    </li>
+    }
+</ul>
+<form
+    [formGroup]="commentForm"
+    id="commentForm"
+    class="mt-4"
+    (ngSubmit)="addComment()"
+>
+    <div class="mb-3">
+        <textarea
+            id="comment"
+            class="form-control"
+            placeholder="Write a comment..."
+            formControlName="text"
+            [ngClass]="validClasses(comment, 'is-valid', 'is-invalid')"
+        ></textarea>
+        @if(comment.errors?.["required"]) {
+            <div class="invalid-feedback">
+                Some text is required to send a comment.
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary mt-3"
+    [disabled]="commentForm.invalid">Send</button>
+</form>

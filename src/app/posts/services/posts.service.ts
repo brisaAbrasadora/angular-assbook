@@ -1,8 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Post, PostInsert } from "../interfaces/post";
+import { Comment, CommentInsert } from "../interfaces/comments";
 import { Observable, map } from "rxjs";
-import { PostsResponse, SinglePostResponse, TotalLikesResponse } from "../interfaces/responses";
+import { CommentResponse, CommentsResponse, PostsResponse, SinglePostResponse, TotalLikesResponse } from "../interfaces/responses";
 
 @Injectable({
     providedIn: "root",
@@ -48,5 +49,17 @@ export class PostsService {
         return this.#http
             .delete<TotalLikesResponse>(`${this.#postsUrl}/${id}/likes`)
             .pipe(map((resp) => resp.totalLikes));
+    }
+
+    getComments(id:number): Observable<Comment[]> {
+        return this.#http
+            .get<CommentsResponse>(`${this.#postsUrl}/${id}/comments`)
+            .pipe(map((resp) => resp.comments));
+    }
+
+    addComment(comment: CommentInsert, id: number): Observable<Comment> {
+        return this.#http
+            .post<CommentResponse>(`${this.#postsUrl}/${id}/comments`, comment)
+            .pipe(map((resp) => resp.comment));
     }
 }

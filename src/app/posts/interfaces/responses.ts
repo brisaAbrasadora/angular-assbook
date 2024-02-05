@@ -1,3 +1,4 @@
+import { Comment } from "./comments";
 import { Post } from "./post";
 
 export interface PostsResponse {
@@ -10,4 +11,12 @@ export interface SinglePostResponse {
 
 export interface TotalLikesResponse {
     totalLikes: number;
+}
+
+export interface CommentsResponse {
+    comments: Comment[];
+}
+
+export interface CommentResponse {
+    comment: Comment;
 }
