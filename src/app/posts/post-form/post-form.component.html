@@ -43,32 +43,41 @@
         }
     </div>
     <div class="mb-3">
-        <label for="image">Photo</label>
-        <input
-            type="file"
-            class="form-control"
-            id="image"
-            formControlName="image"
-            accept="image/*"
-            (click)="resetImage()"
-            (change)="changeImage($event)"
-            [ngClass]="validClasses(image, 'is-valid', 'is-invalid')"
-        />
-        @if(image.errors?.['extension']) {
-        <div class="invalid-feedback">
-            Photo extensions allowed are .jpg, .jpeg, .gif, .png and .bmp
+        <input type="radio" id="postPhoto" value="photo" checked>
+        <label for="postPhoto">Post Photo</label>
+        <input type="radio" id="postLocation" value="location" class="ms-3">
+        <label for="postLocation">Post location</label>
+    </div>
+    <div id="photo-group">
+        <div class="mb-3">
+            <label for="image">Photo</label>
+            <input
+                type="file"
+                class="form-control"
+                id="image"
+                formControlName="image"
+                accept="image/*"
+                (click)="resetImage()"
+                (change)="changeImage($event)"
+                [ngClass]="validClasses(image, 'is-valid', 'is-invalid')"
+            />
+            @if(image.errors?.['extension']) {
+            <div class="invalid-feedback">
+                Photo extensions allowed are .jpg, .jpeg, .gif, .png and .bmp
+            </div>
+            }
         </div>
+        @if (!image.errors && imageBase64) {
+        <img
+            alt=""
+            id="imgPreview"
+            name="imgPreview"
+            [src]="imageBase64"
+            class="img-thumbnail"
+        />
         }
     </div>
-    @if (!image.errors && imageBase64) {
-    <img
-        alt=""
-        id="imgPreview"
-        name="imgPreview"
-        [src]="imageBase64"
-        class="img-thumbnail"
-    />
-    }
+    <div id="location-group"></div>
     <div class="mb-3">
         <label for="mood">Mood</label>
         <select class="form-select" formControlName="mood" id="mood">
