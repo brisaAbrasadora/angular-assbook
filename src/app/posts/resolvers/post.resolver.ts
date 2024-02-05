@@ -5,6 +5,7 @@ import { PostsService } from "../services/posts.service";
 import { EMPTY, catchError } from "rxjs";
 
 export const postResolver: ResolveFn<Post> = (route) => {
+    console.log("hello from postResolver");
     return inject(PostsService).getPost(+route.params["id"]).pipe(
         catchError(() => {
             inject(Router).navigate(["/posts"]);

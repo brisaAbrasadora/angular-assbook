@@ -8,6 +8,7 @@
             formControlName="title"
             placeholder="Your post's title"
             [ngClass]="validClasses(title, 'is-valid', 'is-invalid')"
+            (click)="test()"
         />
         @if(title.errors?.['minlength']) {
         <div class="invalid-feedback">

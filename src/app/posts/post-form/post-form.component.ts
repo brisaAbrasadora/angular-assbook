@@ -1,6 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component, Input, OnInit, inject, numberAttribute } from "@angular/core";
 import { FormControl, ReactiveFormsModule, NonNullableFormBuilder, Validators } from "@angular/forms";
-import { PostInsert } from "../interfaces/post";
+import { Post, PostInsert } from "../interfaces/post";
 import { CommonModule } from "@angular/common";
 import { PostsService } from "../services/posts.service";
 import { Router } from "@angular/router";
@@ -15,7 +15,41 @@ import { formRequiredValidator } from "../../validators/form-required.validator"
     templateUrl: "./post-form.component.html",
     styleUrl: "./post-form.component.css",
 })
-export class PostFormComponent {
+export class PostFormComponent implements OnInit{
+    @Input() post!: Post;
+    @Input( {transform: numberAttribute }) id!: number;
+    // ngOnChanges(changes: SimpleChanges): void {
+    //     if (changes["post"].currentValue !== undefined) {
+    //         console.log(changes["post"].currentValue !== undefined);
+    //         this.title.setValue(changes["post"].currentValue["title"]);
+    //         console.log(JSON.stringify(changes));
+    //         for (const propName in changes) {
+    //             console.log(`${propName}`);
+    //             const chng = changes[propName];
+    //             const cur = JSON.stringify(chng.currentValue);
+    //             const prev = JSON.stringify(chng.previousValue);
+    //             console.log(`${propName}: currentValue = ${cur}\n previousValue = ${prev}`);
+    //         }
+    //     }
+    // }
+    ngOnInit(): void {
+        // this.#postsService.getPost(this.id)
+        //     .subscribe((p) => (this.post = p));
+        // title: FormControl = this.#formBuilder.control(this.post ? this.post.title : "" , [Validators.minLength(5),
+        //     invalidCharactersValidator("^[a-zA-Z][a-zA-Z ]*$")]);
+        // description: FormControl = this.#formBuilder.control("", Validators.minLength(8));
+        // image: FormControl = this.#formBuilder.control("", extensionValidator(["jpg", "png", "jpeg",
+        //     "gif", "bmp"]));
+        // mood: FormControl = this.#formBuilder.control(0);
+        console.log(this.post);
+        this.title.setValue(this.post?.title);
+        this.description.setValue(this.post?.description);
+
+        this.imageBase64 = this.post?.image;
+        this.mood.setValue(this.post?.mood ? this.post.mood : 0);
+        console.log(this.id);
+    }
+
     #formBuilder = inject(NonNullableFormBuilder);
     #postsService = inject(PostsService);
     #router = inject(Router);
@@ -27,11 +61,15 @@ export class PostFormComponent {
         "gif", "bmp"]));
     mood: FormControl = this.#formBuilder.control(0);
 
-    imageBase64: string = "";
+    imageBase64: string | undefined = "";
     saved: boolean = false;
 
     constructor() {
         this.resetForm();
+    }
+
+    test() {
+        console.log(this.post);
     }
 
     postForm = this.#formBuilder.group({
@@ -65,15 +103,27 @@ export class PostFormComponent {
                 image: this.imageBase64,
                 mood: +this.mood.value
             };
-            this.#postsService.addPost(post).subscribe({
-                next: () => {
-                    this.saved = true;
-                    this.#router.navigate(["/posts"]);
-                },
-                error: (error) => {
-                    console.error(error.message);
-                }
-            });
+            if(this.id) {
+                this.#postsService.editPost(post, this.id).subscribe({
+                    next: () => {
+                        this.saved = true;
+                        this.#router.navigate(["/posts"]);
+                    },
+                    error: (error) => {
+                        console.error(error.message);
+                    }
+                });
+            } else {
+                this.#postsService.addPost(post).subscribe({
+                    next: () => {
+                        this.saved = true;
+                        this.#router.navigate(["/posts"]);
+                    },
+                    error: (error) => {
+                        console.error(error.message);
+                    }
+                });
+            }
         }
     }
 

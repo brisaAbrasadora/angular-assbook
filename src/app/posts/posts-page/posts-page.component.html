@@ -1,6 +1,12 @@
-<search-posts (search)="updateSearch($event)"></search-posts>
+<nav class="navbar navbar-light bg-light justify-content-between mt-3">
+    <form class="container-fluid">
+        <input class="form-control" type="text" name="search" id="search" 
+          placeholder="Search" aria-label="Search" [ngModel]="search()"
+          (ngModelChange)="search.set($event)">
+    </form>
+  </nav>
 <div id="postContainer" class="mt-3">
-    @for (post of posts | postFilter:params; track post.id;) {
+    @for (post of filteredPosts(); track post.id;) {
     <post-card [post]="post" (deleted)="deletePost(post)" />
     }
 </div>

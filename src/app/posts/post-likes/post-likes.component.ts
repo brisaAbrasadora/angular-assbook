@@ -14,7 +14,8 @@ export class PostLikesComponent implements OnInit {
         this.auxLikes = likes;
     }
 
-    @Output() likesChanged = new EventEmitter<boolean | null>();
+    @Output() userLikesChanged = new EventEmitter<boolean | null>();
+    
     #likes: boolean | null = null;
     auxLikes: boolean | null = null;
 
@@ -26,15 +27,11 @@ export class PostLikesComponent implements OnInit {
         this.auxLikes = this.#likes;
     }
 
-    changeLikes(likes: boolean | null) {
-        this.likesChanged.emit(likes);
-    }
-
     toggleLikePost(isLike: boolean) {
         if (isLike) {
-            this.likesChanged.emit(this.auxLikes === true ? null : true);
+            this.userLikesChanged.emit(this.auxLikes === true ? null : true);
         } else {
-            this.likesChanged.emit(this.auxLikes === false ? null : false);
+            this.userLikesChanged.emit(this.auxLikes === false ? null : false);
         }
     }
 }

@@ -34,4 +34,14 @@ export const postsRoutes: Routes = [
                 (m) => m.PostDetailComponent
             ),
     },
+    {
+        path: ":id/edit",
+        title: "Edit post | AssBook",
+        canActivate: [numericIdGuard, loginActivateGuard],
+        resolve: { post: postResolver },
+        loadComponent: () => 
+            import("./post-form/post-form.component").then(
+                (m) => m.PostFormComponent
+            ),
+    },
 ];
