@@ -16,6 +16,9 @@ import { ProfilePicture, UserInfo, UserPassword } from "../interfaces/profile";
 import { UserService } from "../services/user.service";
 import { CommonModule } from "@angular/common";
 import { matchPasswordValidator } from "../../validators/match-password.validator";
+import { ConfirmModalComponent } from "../../modals/confirm-modal/confirm-modal.component";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { CanComponentDeactivate } from "../../interfaces/can-component-deactivate";
 
 @Component({
     selector: "profile-page",
@@ -30,7 +33,7 @@ import { matchPasswordValidator } from "../../validators/match-password.validato
     templateUrl: "./profile-page.component.html",
     styleUrl: "./profile-page.component.css",
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent implements OnInit, CanComponentDeactivate {
     @Input() user!: User;
 
     ngOnInit(): void {
@@ -42,6 +45,7 @@ export class ProfilePageComponent implements OnInit {
 
     #formBuilder = inject(NonNullableFormBuilder);
     #userService = inject(UserService);
+    #modalService = inject(NgbModal);
 
     coordinates: Coordinates = {
         latitude: 0,
@@ -134,8 +138,8 @@ export class ProfilePageComponent implements OnInit {
         }
     }
 
-    closeEdit(): void {
-        if (this.canDeactivate()) {
+    async closeEdit(): Promise<void> {
+        if (await this.canDeactivate()) {
             this.editPassword = false;
             this.editProfile = false;
             this.email.reset();
@@ -186,11 +190,21 @@ export class ProfilePageComponent implements OnInit {
         }
     }
 
-    canDeactivate(): boolean {
-        return (
-            this.saved ||
-            (!this.editProfileForm.dirty && !this.editPasswordForm.dirty) ||
-            confirm("Do you want to leave this page? Changes won't be saved.")
-        );
+    // canDeactivate(): boolean {
+    //     return (
+    //         this.saved ||
+    //         (!this.editProfileForm.dirty && !this.editPasswordForm.dirty) ||
+    //         confirm("Do you want to leave this page? Changes won't be saved.")
+    //     );
+    // }
+
+    canDeactivate() {
+        if (this.saved || (this.editProfileForm.pristine && this.editPasswordForm.pristine)) {
+            return true;
+        }
+        const modalRef = this.#modalService.open(ConfirmModalComponent);
+        modalRef.componentInstance.title = "Changes not saved";
+        modalRef.componentInstance.body = "Do you want to leave the page?";
+        return modalRef.result.catch(() => false);
     }
 }

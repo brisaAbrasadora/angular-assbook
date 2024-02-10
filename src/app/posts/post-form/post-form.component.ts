@@ -24,6 +24,9 @@ import { BmMapDirective } from "../../bingmaps/bm-map.directive";
 import { BmMarkerDirective } from "../../bingmaps/bm-marker.directive";
 import { Coordinates } from "../../bingmaps/interfaces/coordinates";
 import { BmAutosuggestDirective } from "../../bingmaps/bm-autosuggest.directive";
+import { CanComponentDeactivate } from "../../interfaces/can-component-deactivate";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ConfirmModalComponent } from "../../modals/confirm-modal/confirm-modal.component";
 
 @Component({
     selector: "post-form",
@@ -38,7 +41,7 @@ import { BmAutosuggestDirective } from "../../bingmaps/bm-autosuggest.directive"
     templateUrl: "./post-form.component.html",
     styleUrl: "./post-form.component.css",
 })
-export class PostFormComponent implements OnInit {
+export class PostFormComponent implements OnInit, CanComponentDeactivate {
     @Input() post?: Post;
     @Input({ transform: numberAttribute }) id!: number;
 
@@ -59,7 +62,7 @@ export class PostFormComponent implements OnInit {
         if (this.post?.lat && this.post?.lng) {
             this.moveMap({
                 latitude: this.post.lat,
-                longitude: this.post.lng
+                longitude: this.post.lng,
             });
         }
     }
@@ -67,6 +70,7 @@ export class PostFormComponent implements OnInit {
     #formBuilder = inject(NonNullableFormBuilder);
     #postsService = inject(PostsService);
     #router = inject(Router);
+    #modalService = inject(NgbModal);
 
     title: FormControl = this.#formBuilder.control("", [
         Validators.minLength(5),
@@ -82,8 +86,14 @@ export class PostFormComponent implements OnInit {
     );
     mood: FormControl = this.#formBuilder.control(0);
     place: FormControl = this.#formBuilder.control("");
-    latitude: FormControl = this.#formBuilder.control({value: 0, disabled: true});
-    longitude: FormControl = this.#formBuilder.control({value: 0, disabled: true});
+    latitude: FormControl = this.#formBuilder.control({
+        value: 0,
+        disabled: true,
+    });
+    longitude: FormControl = this.#formBuilder.control({
+        value: 0,
+        disabled: true,
+    });
 
     imageBase64?: string;
     saved: boolean = false;
@@ -102,7 +112,7 @@ export class PostFormComponent implements OnInit {
             mood: this.mood,
             place: this.place,
             latitude: this.latitude,
-            longitude: this.longitude
+            longitude: this.longitude,
         },
         {
             validators: formRequiredValidator,
@@ -113,12 +123,22 @@ export class PostFormComponent implements OnInit {
         this.postForm.reset();
     }
 
-    canDeactivate(): boolean {
-        return (
-            this.saved ||
-            !this.postForm.dirty ||
-            confirm("Do you want to leave this page? Post won't be saved.")
-        );
+    // canDeactivate(): boolean {
+    //     return (
+    //         this.saved ||
+    //         !this.postForm.dirty ||
+    //         confirm("Do you want to leave this page? Post won't be saved.")
+    //     );
+    // }
+
+    canDeactivate() {
+        if (this.saved || this.postForm.pristine) {
+            return true;
+        }
+        const modalRef = this.#modalService.open(ConfirmModalComponent);
+        modalRef.componentInstance.title = "Changes not saved";
+        modalRef.componentInstance.body = "Do you want to leave the page?";
+        return modalRef.result.catch(() => false);
     }
 
     validClasses(
@@ -134,7 +154,7 @@ export class PostFormComponent implements OnInit {
 
     resetImage(): void {
         this.image.reset();
-        this.imageBase64 = this.post?.image? this.post.image : "";
+        this.imageBase64 = this.post?.image ? this.post.image : "";
     }
 
     resetPlace(): void {
@@ -156,7 +176,7 @@ export class PostFormComponent implements OnInit {
             this.imageBase64 = reader.result as string;
         });
         if (this.image.invalid) {
-            this.imageBase64 = this.post?.image? this.post.image : "";
+            this.imageBase64 = this.post?.image ? this.post.image : "";
         }
     }
 

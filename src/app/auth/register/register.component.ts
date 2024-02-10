@@ -12,6 +12,9 @@ import { AuthService } from "../services/auth.service";
 import { Router, RouterLink } from "@angular/router";
 import { matchEmailValidator } from "../../validators/match-email.validator";
 import { GeolocationService } from "../services/geolocation.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { CanComponentDeactivate } from "../../interfaces/can-component-deactivate";
+import { ConfirmModalComponent } from "../../modals/confirm-modal/confirm-modal.component";
 
 @Component({
     selector: "register",
@@ -20,7 +23,7 @@ import { GeolocationService } from "../services/geolocation.service";
     templateUrl: "./register.component.html",
     styleUrl: "./register.component.css",
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, CanComponentDeactivate {
     ngOnInit(): void {
         this.#geolocationService.getLocation().subscribe({
             next: (coordinates) => {
@@ -39,6 +42,7 @@ export class RegisterComponent implements OnInit {
     #formBuilder = inject(NonNullableFormBuilder);
     #authService = inject(AuthService);
     #router = inject(Router);
+    #modalService = inject(NgbModal);
     #geolocationService = inject(GeolocationService);
     saved: boolean = false;
 
@@ -148,11 +152,21 @@ export class RegisterComponent implements OnInit {
         };
     }
 
-    canDeactivate(): boolean {
-        return (
-            this.saved ||
-            !this.registerForm.dirty ||
-            confirm("Do you want to leave this page? Post won't be saved.")
-        );
+    // canDeactivate(): boolean {
+    //     return (
+    //         this.saved ||
+    //         !this.registerForm.dirty ||
+    //         confirm("Do you want to leave this page? Post won't be saved.")
+    //     );
+    // }
+    
+    canDeactivate() {
+        if (this.saved || this.registerForm.pristine) {
+            return true;
+        }
+        const modalRef = this.#modalService.open(ConfirmModalComponent);
+        modalRef.componentInstance.title = "Changes not saved";
+        modalRef.componentInstance.body = "Do you want to leave the page?";
+        return modalRef.result.catch(() => false);
     }
 }
