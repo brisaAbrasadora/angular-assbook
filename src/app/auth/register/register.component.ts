@@ -40,6 +40,7 @@ export class RegisterComponent implements OnInit {
     #authService = inject(AuthService);
     #router = inject(Router);
     #geolocationService = inject(GeolocationService);
+    saved: boolean = false;
 
     avatarBase64: string = "";
 
@@ -103,6 +104,7 @@ export class RegisterComponent implements OnInit {
 
             this.#authService.register(user).subscribe({
                 next: () => {
+                    this.saved = true;
                     this.#router.navigate(["/login"]);
                 },
                 error: (error) => {
@@ -144,5 +146,13 @@ export class RegisterComponent implements OnInit {
             [validClass]: control.touched && control.valid && control.value,
             [errorClass]: control.touched && control.invalid,
         };
+    }
+
+    canDeactivate(): boolean {
+        return (
+            this.saved ||
+            !this.registerForm.dirty ||
+            confirm("Do you want to leave this page? Post won't be saved.")
+        );
     }
 }

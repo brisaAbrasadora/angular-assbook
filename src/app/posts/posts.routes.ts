@@ -39,6 +39,7 @@ export const postsRoutes: Routes = [
         path: ":id/edit",
         title: "Edit post | AssBook",
         canActivate: [numericIdGuard, loginActivateGuard],
+        canDeactivate: [leavePageGuard],
         resolve: { post: postResolver },
         loadComponent: () => 
             import("./post-form/post-form.component").then(

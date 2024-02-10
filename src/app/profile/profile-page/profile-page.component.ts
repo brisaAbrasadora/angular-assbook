@@ -20,7 +20,6 @@ export class ProfilePageComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        console.log(this.user);
         this.coordinates = {
             latitude: this.user.lat,
             longitude: this.user.lng,
