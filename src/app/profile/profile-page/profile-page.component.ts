@@ -4,15 +4,16 @@ import { BmMapDirective } from "../../bingmaps/bm-map.directive";
 import { Coordinates } from "../../bingmaps/interfaces/coordinates";
 import { BmMarkerDirective } from "../../bingmaps/bm-marker.directive";
 import { RouterLink } from "@angular/router";
-import { FormControl, NonNullableFormBuilder } from "@angular/forms";
+import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { extensionValidator } from "../../validators/extension.validator";
 import { ProfilePicture } from "../interfaces/profile";
 import { UserService } from "../services/user.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
     selector: "profile-page",
     standalone: true,
-    imports: [BmMapDirective, BmMarkerDirective, RouterLink],
+    imports: [BmMapDirective, BmMarkerDirective, RouterLink, ReactiveFormsModule, CommonModule],
     templateUrl: "./profile-page.component.html",
     styleUrl: "./profile-page.component.css",
 })
@@ -34,6 +35,9 @@ export class ProfilePageComponent implements OnInit {
         longitude: 0,
     };
     image: FormControl = this.#formBuilder.control("", extensionValidator(["jpg", "png", "jpeg", "gif", "bmp"]));
+    imageForm: FormGroup = this.#formBuilder.group({
+        image: this.image
+    });
 
     updateProfilePicture(event: Event): void {
         const fileInput = event.target as HTMLInputElement;
@@ -60,5 +64,16 @@ export class ProfilePageComponent implements OnInit {
                     });
             }
         });
+    }
+
+    validClasses(
+        control: FormControl,
+        validClass: string,
+        errorClass: string
+    ): { [key: string]: boolean } {
+        return {
+            [validClass]: control.touched && control.valid && control.value,
+            [errorClass]: control.touched && control.invalid,
+        };
     }
 }

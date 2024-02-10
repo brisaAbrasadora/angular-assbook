@@ -4,7 +4,7 @@ bm-map {
     width: 600px;
 }
 
-#profile div:has(#avatar) {
+#profile form:has(#avatar) {
     position: relative;
     & > label {
       position: absolute;

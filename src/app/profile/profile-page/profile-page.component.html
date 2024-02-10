@@ -1,96 +1,119 @@
 <div class="row mt-4" id="profile">
     <div class="col-3">
-        <div>
-            <img class="w-100" id="avatar" [src]="user.avatar" alt="" />
+        <form [formGroup]="imageForm">
+            <img class="w-100" [src]="user.avatar" alt="" />
             @if( user.me ) {
             <label class="btn btn-sm btn-danger">
                 <i class="fa-regular fa-image"></i>
-                <input type="file" id="avatarInput" class="d-none" (change)="updateProfilePicture($event)"/>
+                <input
+                    type="file"
+                    formControlName="image"
+                    id="avatar"
+                    class="d-none"
+                    (change)="updateProfilePicture($event)"
+                    [ngClass]="validClasses(image, 'is-valid', 'is-invalid')"
+                />
             </label>
+            } 
+        </form>
+       @if(image.errors?.['extension']) {
+            <small class="text-danger">
+                Photo extensions allowed are .jpg, .jpeg, .gif, .png and .bmp
+            </small>
             }
-        </div>
     </div>
 
-    <div class="col-9" id="profileInfo">
-        <!--  Cambiar h4 por inputs con un botón -->
-        <h4 id="name">{{ user.name }}</h4>
-        <h4 id="email">
-            <small class="text-muted">{{ user.email }}</small>
-        </h4>
-        <!-- Añadir campo de modificar password que muestre 2 campos -->
-        @if( user.me ) {
-        <div>
-            <button class="btn btn-primary me-1" id="editProfile">
-                <i class="fa-regular fa-pen-to-square"></i>
-                Edit profile
-            </button>
-            <button class="btn btn-success" id="editPassword">
-                <i class="fa-solid fa-lock"></i>
-                Edit password
-            </button>
-        </div>
-        }
-    </div>
-
-    <div class="col-9 d-none" id="profileForm">
-        <form>
-            <div class="mb-3">
-                <label for="email">Email:</label>
-                <input
-                    type="email"
-                    class="form-control"
-                    name="email"
-                    id="email"
-                    placeholder="Email"
-                />
-                <label for="name">Name:</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    name="name"
-                    id="name"
-                    placeholder="Name"
-                />
+    <div class="col-9">
+        <div class="row">
+            <div class="col-9" id="profileInfo">
+                <!--  Cambiar h4 por inputs con un botón -->
+                <h4 id="name">{{ user.name }}</h4>
+                <h4 id="email">
+                    <small class="text-muted">{{ user.email }}</small>
+                </h4>
+                <!-- Añadir campo de modificar password que muestre 2 campos -->
+                @if( user.me ) {
+                <div>
+                    <button class="btn btn-primary me-2" id="editProfile">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                        Edit profile
+                    </button>
+                    <button class="btn btn-success" id="editPassword">
+                        <i class="fa-solid fa-lock"></i>
+                        Edit password
+                    </button>
+                </div>
+                }
             </div>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-            <button type="button" class="btn btn-danger" id="cancelEditProfile">
-                Cancel
-            </button>
-        </form>
-    </div>
-
-    <div class="col-9 d-none" id="passwordForm">
-        <form>
-            <div class="mb-3">
-                <label for="password">Password:</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    name="password"
-                    id="password"
-                    placeholder="Password"
-                />
-                <label for="password2">Repeat password:</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    name="password2"
-                    id="password2"
-                    placeholder="Repeat password"
-                />
+            <div class="col-9 mt-3" id="profileForm">
+                <form>
+                    <div class="mb-3">
+                        <label for="email">Email:</label>
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            id="email"
+                            placeholder="Email"
+                        />
+                        <label for="name">Name:</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="name"
+                            id="name"
+                            placeholder="Name"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Save changes
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-danger ms-2"
+                        id="cancelEditProfile"
+                    >
+                        Cancel
+                    </button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-            <button
-                type="button"
-                class="btn btn-danger"
-                id="cancelEditPassword"
-            >
-                Cancel
-            </button>
-        </form>
+    
+            <div class="col-9 mt-3" id="passwordForm">
+                <form>
+                    <div class="mb-3">
+                        <label for="password">Password:</label>
+                        <input
+                            type="password"
+                            class="form-control"
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                        />
+                        <label for="password2">Repeat password:</label>
+                        <input
+                            type="password"
+                            class="form-control"
+                            name="password2"
+                            id="password2"
+                            placeholder="Repeat password"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Save changes
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-danger ms-2"
+                        id="cancelEditPassword"
+                    >
+                        Cancel
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-<br>
+<br />
 <div class="row mb-5">
     <div class="col mb-4">
         <bm-map [coords]="coordinates">
@@ -100,7 +123,11 @@
     <div class="col">
         <div class="list-group">
             <li class="list-group-item">
-                <a [routerLink]="['/posts']" [queryParams]="{ creator: user.id }" class=" ms-auto me-auto">
+                <a
+                    [routerLink]="['/posts']"
+                    [queryParams]="{ creator: user.id }"
+                    class="ms-auto me-auto"
+                >
                     See all {{ user.name }}'s posts
                 </a>
             </li>
