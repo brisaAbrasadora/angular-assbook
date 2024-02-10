@@ -3,6 +3,8 @@ import { Injectable, inject } from "@angular/core";
 import { Observable, map } from "rxjs";
 import { User } from "../../auth/interfaces/user";
 import { UserResponse } from "../../auth/interfaces/responses";
+import { ProfilePicture } from "../interfaces/profile";
+import { AvatarResponse } from "../interfaces/responses";
 
 @Injectable({
     providedIn: "root",
@@ -23,5 +25,11 @@ export class UserService {
                 .get<UserResponse>(`${this.#userUrl}/me`)
                 .pipe(map((resp) => resp.user));
         }
+    }
+
+    updateProfilePicture(profilePicture: ProfilePicture): Observable<string> {
+        return this.#http
+            .put<AvatarResponse>(`${this.#userUrl}/me/avatar`, profilePicture)
+            .pipe(map((resp) => resp.avatar));
     }
 }

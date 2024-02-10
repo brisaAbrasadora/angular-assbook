@@ -5,7 +5,6 @@ import { inject } from "@angular/core";
 import { EMPTY, catchError } from "rxjs";
 
 export const userResolver: ResolveFn<User> = (route) => {
-    console.log("hello from userResolver");
     return inject(UserService).getProfile(+route.params["id"]).pipe(
         catchError(() => {
             inject(Router).navigate(["/posts"]);

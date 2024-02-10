@@ -5,7 +5,7 @@
             @if( user.me ) {
             <label class="btn btn-sm btn-danger">
                 <i class="fa-regular fa-image"></i>
-                <input type="file" id="avatarInput" class="d-none" />
+                <input type="file" id="avatarInput" class="d-none" (change)="updateProfilePicture($event)"/>
             </label>
             }
         </div>
