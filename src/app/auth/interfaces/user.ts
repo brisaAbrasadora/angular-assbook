@@ -16,7 +16,7 @@ export interface User {
     me?: boolean;
 }
 
-export interface GoogleUser {
+export interface TokenUser {
     token: string;
     lat?: number;
     lng?: number;

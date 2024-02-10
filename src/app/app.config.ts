@@ -7,11 +7,20 @@ import { baseUrlInterceptor } from "./interceptors/base-url.interceptor";
 import { authInterceptor } from "./auth/interceptors/auth.interceptor";
 import { provideBingmapsKey } from "./bingmaps/bingmaps.config";
 import { provideGoogleId } from "./auth/google-login/google-login.config";
+import { provideFacebookId } from "./auth/facebook-login/facebook-login.config";
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideGoogleId("746820501392-oalflicqch2kuc12s8rclb5rf7b1fist.apps.googleusercontent.com"),
-        provideRouter(routes, withComponentInputBinding()), 
-        provideHttpClient(withInterceptors([baseUrlInterceptor, authInterceptor])),
-        provideBingmapsKey("Ak0owWN3FVZNziU2wwWOd9Alvd9rJ3QUCV7TK1M4QcPYrmBz1A4jICj8nNJ29R-Z")],
+        provideFacebookId("551918016324547", "v15.0"),
+        provideGoogleId(
+            "746820501392-oalflicqch2kuc12s8rclb5rf7b1fist.apps.googleusercontent.com"
+        ),
+        provideRouter(routes, withComponentInputBinding()),
+        provideHttpClient(
+            withInterceptors([baseUrlInterceptor, authInterceptor])
+        ),
+        provideBingmapsKey(
+            "Ak0owWN3FVZNziU2wwWOd9Alvd9rJ3QUCV7TK1M4QcPYrmBz1A4jICj8nNJ29R-Z"
+        ),
+    ],
 };

@@ -39,6 +39,17 @@
     >
         Login
     </button>
+    <div googleLogin class="btn"></div>
     
 </form>
-<div googleLogin class="btn"></div>
+
+<button
+        fbLogin
+        [scopes]="['email', 'public_profile']"
+        class="btn btn-primary"
+        (loginOk)="loggedFacebook($event)"
+        (loginError)="showError($event)"
+    >
+        <fa-icon [icon]="iconFacebook"></fa-icon>
+        Login con Facebook
+</button>
