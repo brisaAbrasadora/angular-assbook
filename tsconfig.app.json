@@ -4,8 +4,9 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [
-      "bingmaps",
-      "@angular/localize"
+        "google.accounts",
+        "bingmaps",
+        "@angular/localize"
     ]
   },
   "files": [

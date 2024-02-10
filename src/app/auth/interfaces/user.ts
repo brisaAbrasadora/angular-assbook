@@ -15,3 +15,9 @@ export interface User {
     lng: number;
     me?: boolean;
 }
+
+export interface GoogleUser {
+    token: string;
+    lat?: number;
+    lng?: number;
+}

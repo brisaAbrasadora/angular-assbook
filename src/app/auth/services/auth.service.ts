@@ -7,7 +7,7 @@ import {
     signal,
 } from "@angular/core";
 import { Observable, catchError, map, of } from "rxjs";
-import { User, UserLogin } from "../interfaces/user";
+import { GoogleUser, User, UserLogin } from "../interfaces/user";
 import { TokenResponse, UserResponse } from "../interfaces/responses";
 
 @Injectable({
@@ -68,7 +68,16 @@ export class AuthService {
             .pipe(map((resp) => resp.user));
     }
 
-    // Missing login with Google
+    loginGoogle(data: GoogleUser): Observable<void> {
+        return this.#http
+            .post<TokenResponse>(`${this.#authUrl}/google`, data)
+            .pipe(
+                map((resp) => {
+                    localStorage.setItem("token", resp.accessToken);
+                    this.#logged.set(true);
+                })
+            );
+    }
 
     // Missing login with Facebook
 }
