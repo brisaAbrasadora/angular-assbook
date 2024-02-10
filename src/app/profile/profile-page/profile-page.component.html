@@ -34,77 +34,112 @@
                 <!-- Añadir campo de modificar password que muestre 2 campos -->
                 @if( user.me ) {
                 <div>
-                    <button class="btn btn-primary me-2" id="editProfile">
+                    <button class="btn btn-primary me-2" id="editProfile" (click)="toggleProfile()"
+                    [disabled]="editPassword">
                         <i class="fa-regular fa-pen-to-square"></i>
                         Edit profile
                     </button>
-                    <button class="btn btn-success" id="editPassword">
+                    <button class="btn btn-success" id="editPassword" (click)="togglePassword()"
+                    [disabled]="editProfile">
                         <i class="fa-solid fa-lock"></i>
                         Edit password
                     </button>
                 </div>
                 }
             </div>
-            <div class="col-9 mt-3" id="profileForm">
-                <form>
+            <div class="col-9 mt-3" id="profileForm" 
+                [ngClass]="{'d-none' : !editProfile}" >
+                <form [formGroup]="editProfileForm" novalidate>
                     <div class="mb-3">
                         <label for="email">Email:</label>
                         <input
                             type="email"
                             class="form-control"
-                            name="email"
-                            id="email"
+                            formControlName="email"
                             placeholder="Email"
+                            [ngClass]="validClasses(email, 'is-valid', 'is-invalid')"
                         />
+                        @if(email.errors?.['required']) {
+                            <div class="invalid-feedback">Email is required.</div>
+                        } @if(email.errors?.['email']) {
+                            <span class="invalid-feedback">This must have an email format.</span>
+                        }
                         <label for="name">Name:</label>
                         <input
                             type="text"
                             class="form-control"
-                            name="name"
-                            id="name"
+                            formControlName="name"
                             placeholder="Name"
+                            [ngClass]="validClasses(name, 'is-valid', 'is-invalid')"
                         />
+                        @if(name.errors?.['required']) {
+                            <div class="invalid-feedback">Name is required.</div>
+                        } 
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <button (click)="submitEdit()" class="btn btn-primary" [disabled]="editProfileForm.invalid">
                         Save changes
                     </button>
                     <button
                         type="button"
                         class="btn btn-danger ms-2"
                         id="cancelEditProfile"
+                        (click)="closeEdit()"
                     >
                         Cancel
                     </button>
                 </form>
             </div>
     
-            <div class="col-9 mt-3" id="passwordForm">
-                <form>
+            <div class="col-9 mt-3" id="passwordForm" 
+                [ngClass]="{'d-none' : !editPassword}" >
+                <form [formGroup]="editPasswordForm" novalidate>
                     <div class="mb-3">
                         <label for="password">Password:</label>
                         <input
                             type="password"
                             class="form-control"
-                            name="password"
-                            id="password"
+                            formControlName="password"
                             placeholder="Password"
+                            [ngClass]="validClasses(password, 'is-valid', 'is-invalid')"
                         />
+                        @if(password.errors?.['required']) {
+                            <div class="invalid-feedback">Password is required.</div>
+                        } 
+                        @if(password.errors?.["minlength"]) {
+                            <div class="invalid-feedback">Password must be at least 4 characters long.</div>
+                        }
                         <label for="password2">Repeat password:</label>
                         <input
                             type="password"
                             class="form-control"
-                            name="password2"
-                            id="password2"
+                            formControlName="passwordConfirm"
                             placeholder="Repeat password"
+                            [ngClass]="{
+                                'is-valid':
+                                    passwordConfirm.touched &&
+                                    passwordConfirm.valid &&
+                                    passwordConfirm.value &&
+                                    editPasswordForm.valid,
+                                'is-invalid':
+                                    (passwordConfirm.touched && passwordConfirm.invalid) ||
+                                    (editPasswordForm.invalid && passwordConfirm.touched)
+                            }"
                         />
+                        @if(password.errors?.['required']) {
+                            <div class="invalid-feedback">Password is required.</div>
+                        } 
+                        @if(editPasswordForm.errors?.["match"]) {
+                            <div class="invalid-feedback">Passwords must match.</div>
+                        }
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <button (click)="submitPassword()" class="btn btn-primary" [disabled]="editPasswordForm.invalid">
                         Save changes
                     </button>
                     <button
                         type="button"
                         class="btn btn-danger ms-2"
                         id="cancelEditPassword"
+                        (click)="closeEdit()"
                     >
                         Cancel
                     </button>
