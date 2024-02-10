@@ -3,11 +3,12 @@ import { User } from "../../auth/interfaces/user";
 import { BmMapDirective } from "../../bingmaps/bm-map.directive";
 import { Coordinates } from "../../bingmaps/interfaces/coordinates";
 import { BmMarkerDirective } from "../../bingmaps/bm-marker.directive";
+import { RouterLink } from "@angular/router";
 
 @Component({
     selector: "profile-page",
     standalone: true,
-    imports: [BmMapDirective, BmMarkerDirective],
+    imports: [BmMapDirective, BmMarkerDirective, RouterLink],
     templateUrl: "./profile-page.component.html",
     styleUrl: "./profile-page.component.css",
 })

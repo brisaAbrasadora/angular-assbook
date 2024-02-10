@@ -91,6 +91,19 @@
     </div>
 </div>
 <br>
-<bm-map [coords]="coordinates">
-    <bm-marker [coords]="coordinates" color="blue"></bm-marker>
-</bm-map>
+<div class="row mb-5">
+    <div class="col mb-4">
+        <bm-map [coords]="coordinates">
+            <bm-marker [coords]="coordinates" color="blue"></bm-marker>
+        </bm-map>
+    </div>
+    <div class="col">
+        <div class="list-group">
+            <li class="list-group-item">
+                <a [routerLink]="['/posts']" [queryParams]="{ creator: user.id }" class=" ms-auto me-auto">
+                    See all {{ user.name }}'s posts
+                </a>
+            </li>
+        </div>
+    </div>
+</div>

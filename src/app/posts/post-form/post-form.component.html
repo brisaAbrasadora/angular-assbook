@@ -112,14 +112,19 @@
                 formControlName="place"
             />
         </div>
-        <bm-map [coords]="coordinates()">
-            <bm-marker [coords]="coordinates()" color="blue"></bm-marker>
-            <bm-autosuggest
-                idContainer="location-container"
-                idInput="place"
-                (locationChanged)="moveMap($event)"
-            ></bm-autosuggest>
-        </bm-map>
+            <bm-map [coords]="coordinates()" [ngClass]="{ 'd-none': !latitude.value }">
+                <bm-marker [coords]="coordinates()" color="blue"></bm-marker>
+                <bm-autosuggest
+                    idContainer="location-container"
+                    idInput="place"
+                    (locationChanged)="moveMap($event)"
+                    (formattedAddress)="updateAddress($event)"
+                ></bm-autosuggest>
+            </bm-map> 
+        <div class="mb-3">
+            <input type="number" formControlName="latitude" id="latitude" hidden>
+            <input type="number" formControlName="longitude" id="longitude" hidden>
+        </div>       
     </div>
     <div class="mb-3">
         <label for="mood">Mood</label>
@@ -137,7 +142,7 @@
                 class="btn btn-primary btn-lg"
                 [disabled]="postForm.invalid"
             >
-                {{ editMode ? "Edit" : "Submit" }}
+                {{ id ? "Edit" : "Submit" }}
             </button>
         </div>
         @if(postForm.errors?.['formRequired'] && postForm.touched) {

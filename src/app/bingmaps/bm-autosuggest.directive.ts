@@ -23,6 +23,7 @@ export class BmAutosuggestDirective implements OnInit {
     #injector = inject(Injector);
 
     @Output() locationChanged = new EventEmitter<Coordinates>();
+    @Output() formattedAddress = new EventEmitter<string>();
     @Input({ required: true }) idInput!: string;
     @Input({ required: true }) idContainer!: string;
 
@@ -35,12 +36,12 @@ export class BmAutosuggestDirective implements OnInit {
                         await this.#loadService.getAutoSuggestManager(
                             this.#bmMap.map()!
                         );
-                    console.log(this.idInput);
-                    console.log(this.idContainer);
                     this.#autoSuggestMgr.attachAutosuggest(
                         "#" + this.idInput,
                         "#" + this.idContainer,
                         (result) => {
+                            
+                            this.formattedAddress.emit(result.address.formattedAddress);
                             this.locationChanged.emit(result.location);
                         }
                     );

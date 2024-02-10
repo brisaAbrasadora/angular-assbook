@@ -24,7 +24,6 @@ import { BmMapDirective } from "../../bingmaps/bm-map.directive";
 import { BmMarkerDirective } from "../../bingmaps/bm-marker.directive";
 import { Coordinates } from "../../bingmaps/interfaces/coordinates";
 import { BmAutosuggestDirective } from "../../bingmaps/bm-autosuggest.directive";
-import { GeolocationService } from "../../auth/services/geolocation.service";
 
 @Component({
     selector: "post-form",
@@ -40,7 +39,7 @@ import { GeolocationService } from "../../auth/services/geolocation.service";
     styleUrl: "./post-form.component.css",
 })
 export class PostFormComponent implements OnInit {
-    @Input() post!: Post;
+    @Input() post?: Post;
     @Input({ transform: numberAttribute }) id!: number;
 
     constructor() {
@@ -48,27 +47,26 @@ export class PostFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log(`Objeto recibido ${JSON.stringify(this.post, null, 2)}`);
         this.title.setValue(this.post?.title);
         this.description.setValue(this.post?.description);
         this.imageBase64 = this.post?.image;
         this.mood.setValue(this.post?.mood ? this.post.mood : 0);
-        this.place.setValue(this.post?.place ? this.post.place : "");
+        this.place.setValue(this.post?.place);
+        this.longitude.setValue(this.post?.lng);
+        this.latitude.setValue(this.post?.lat);
+
         if (this.post?.lat && this.post?.lng) {
-            this.coordinates.set({
+            this.moveMap({
                 latitude: this.post.lat,
-                longitude: this.post.lng,
+                longitude: this.post.lng
             });
-            this.moveMap(this.coordinates());
-        } else {
-            this.geolocate();
         }
-        if (this.post) this.editMode = true;
     }
 
     #formBuilder = inject(NonNullableFormBuilder);
     #postsService = inject(PostsService);
     #router = inject(Router);
-    #geolocationService = inject(GeolocationService);
 
     title: FormControl = this.#formBuilder.control("", [
         Validators.minLength(5),
@@ -84,8 +82,10 @@ export class PostFormComponent implements OnInit {
     );
     mood: FormControl = this.#formBuilder.control(0);
     place: FormControl = this.#formBuilder.control("");
+    latitude: FormControl = this.#formBuilder.control({value: 0, disabled: true});
+    longitude: FormControl = this.#formBuilder.control({value: 0, disabled: true});
 
-    imageBase64: string | undefined = "";
+    imageBase64?: string;
     saved: boolean = false;
     photoSelected: WritableSignal<boolean> = signal(true);
     disabledLocation: WritableSignal<boolean> = signal(false);
@@ -93,8 +93,6 @@ export class PostFormComponent implements OnInit {
         latitude: 0,
         longitude: 0,
     });
-    editMode = false;
-
 
     postForm = this.#formBuilder.group(
         {
@@ -103,6 +101,8 @@ export class PostFormComponent implements OnInit {
             image: this.image,
             mood: this.mood,
             place: this.place,
+            latitude: this.latitude,
+            longitude: this.longitude
         },
         {
             validators: formRequiredValidator,
@@ -132,53 +132,15 @@ export class PostFormComponent implements OnInit {
         };
     }
 
-    test = "";
-
-    addPost(): void {
-        if (this.postForm.valid) {
-            const post: PostInsert = {
-                title: this.title.value,
-                description: this.description.value,
-                image: this.imageBase64,
-                mood: +this.mood.value,
-                place: this.place.value,
-                lat: this.coordinates().latitude,
-                lng: this.coordinates().longitude
-            };
-            console.log(post);
-            if (this.id) {
-                this.#postsService.editPost(post, this.id).subscribe({
-                    next: () => {
-                        this.saved = true;
-                        this.#router.navigate(["/posts"]);
-                    },
-                    error: (error) => {
-                        console.error(error.message);
-                    },
-                });
-            } else {
-                this.#postsService.addPost(post).subscribe({
-                    next: () => {
-                        this.saved = true;
-                        this.#router.navigate(["/posts"]);
-                    },
-                    error: (error) => {
-                        console.error(error.message);
-                    },
-                });
-            }
-        }
-    }
-
     resetImage(): void {
         this.image.reset();
-        this.imageBase64 = "";
+        this.imageBase64 = this.post?.image? this.post.image : "";
     }
 
     resetPlace(): void {
-        this.post.place = this.post.place ? this.post.place : "";
-        this.post.lat = this.post.lat ? this.post.lat : 0;
-        this.post.lng = this.post.lng ? this.post.lng : 0;
+        this.place.setValue(this.post?.place ? this.post.place : "");
+        this.latitude.setValue(this.post?.lat ? this.post.lat : "");
+        this.longitude.setValue(this.post?.lng ? this.post.lng : "");
     }
 
     changeImage(event: Event): void {
@@ -194,12 +156,12 @@ export class PostFormComponent implements OnInit {
             this.imageBase64 = reader.result as string;
         });
         if (this.image.invalid) {
-            this.imageBase64 = "";
+            this.imageBase64 = this.post?.image? this.post.image : "";
         }
     }
 
     changePostType(): void {
-        if(this.photoSelected()) {
+        if (this.photoSelected()) {
             this.resetImage();
         } else {
             this.resetPlace();
@@ -208,23 +170,51 @@ export class PostFormComponent implements OnInit {
     }
 
     moveMap(coords: Coordinates) {
-        this.coordinates.set(coords);
+        console.log(`Coordenadas recibidas ${JSON.stringify(coords, null, 2)}`);
+        this.coordinates.set({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+        });
+        this.latitude.setValue(coords.latitude);
+        this.longitude.setValue(coords.longitude);
     }
 
-    geolocate(): void {
-        this.#geolocationService.getLocation().subscribe({
-            next: (coordinates) => {
-                this.coordinates.set({
-                    latitude: coordinates.latitude,
-                    longitude: coordinates.longitude,
+    updateAddress(address: string) {
+        this.place.setValue(address);
+    }
+
+    addPost(): void {
+        if (this.postForm.valid) {
+            const newPost: PostInsert = {
+                title: this.title.value,
+                description: this.description.value,
+                mood: +this.mood.value,
+                image: this.imageBase64,
+                place: this.place.value,
+                lat: this.latitude.value,
+                lng: this.longitude.value,
+            };
+            if (this.id) {
+                this.#postsService.editPost(newPost, this.id).subscribe({
+                    next: () => {
+                        this.saved = true;
+                        this.#router.navigate(["/posts"]);
+                    },
+                    error: (error) => {
+                        console.error(error.message);
+                    },
                 });
-                this.moveMap(this.coordinates());
-            },
-            error: (error) => {
-                console.error("Error getting location in register:", error);
-                this.disabledLocation.update((disabled) => !disabled);
-                this.photoSelected.set(true);
-            },
-        });
+            } else {
+                this.#postsService.addPost(newPost).subscribe({
+                    next: () => {
+                        this.saved = true;
+                        this.#router.navigate(["/posts"]);
+                    },
+                    error: (error) => {
+                        console.error(error.message);
+                    },
+                });
+            }
+        }
     }
 }
